@@ -42,3 +42,12 @@ img:hover {
     transition: all 1s;
 
 }
+
+/*Mostrar un integrante */
+.integrante{
+    display: none;
+}
+
+.integrante.active{
+    display: block;
+}
