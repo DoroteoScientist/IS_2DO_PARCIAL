@@ -1,25 +1,148 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="es">
 <head>
-    <title>Mi sitio</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Página del Equipo - Sesión 1</title>
+  <link rel="stylesheet" href="index.css" />
 </head>
 
 <body>
-    <h1  style="text-align: center;">Bienvenido</h1>
-    <p>Arriaga Vázquez Mariana </p>
-    <p>Mendoza Lara Victor Manuel</p>
-    <p>Muñoz Salazar Leonardo Manuel</p>
-    <p>Saldaña Cornejo Mariane</p>
-    <p>Torres Páramo Diego Alejandro</p>
-    <p>Zúiñiga Cruz Emilio Abel</p>
-<h1>Bienvenido</h1>
-<p>Este es mi sitio web.</p>
+  <header class="cabecera">
+    <h1>Proyecto del Curso - Ingeniería en Sistemas Computacionales</h1>
+    <h2>Equipo: Coraje</h2>
+  </header>
+
+  <main>
+    <section aria-labelledby="titulo-integrantes" class="seccion-integrantes">
+      <h3 id="titulo-integrantes">Integrantes del Equipo</h3>
+
+      <!-- Carrusel: solo un .integrante tendrá la clase .activo -->
+      <div class="carrusel" role="region" aria-roledescription="carrusel" aria-live="polite">
+        <article class="integrante activo" data-index="0" tabindex="0" aria-hidden="false">
+          <img src="fotos/alumno1.jpg" alt="Foto de Mariane Saldaña" class="foto" />
+          <div class="bio">
+            <p class="nombre"><strong>Mariane Saldaña</strong></p>
+            <p class="descripcion">Estudiante de sexto semestre de Ingeniería en Sistemas Computacionales. Me gusta trabajar en equipo y aprender nuevas tecnologías.</p>
+          </div>
+        </article>
+
+        <article class="integrante" data-index="1" tabindex="-1" aria-hidden="true">
+          <img src="fotos/alumno2.jpg" alt="Foto de Victor Manuel" class="foto" />
+          <div class="bio">
+            <p class="nombre"><strong>Victor Manuel</strong></p>
+            <p class="descripcion">Estudiante de octavo semestre. Me apasiona la programación y el desarrollo de software.</p>
+          </div>
+        </article>
+
+        <article class="integrante" data-index="2" tabindex="-1" aria-hidden="true">
+          <img src="fotos/alumno3.jpg" alt="Foto de Leonardo Muñoz" class="foto" />
+          <div class="bio">
+            <p class="nombre"><strong>Leonardo Muñoz</strong></p>
+            <p class="descripcion">Estudiante de sexto semestre. Me interesa el desarrollo web y las bases de datos.</p>
+          </div>
+        </article>
+
+        <article class="integrante" data-index="3" tabindex="-1" aria-hidden="true">
+          <img src="fotos/alumno4.jpg" alt="Foto de Emilio Zúñiga" class="foto" />
+          <div class="bio">
+            <p class="nombre"><strong>Emilio Zúñiga</strong></p>
+            <p class="descripcion">Estudiante de octavo semestre. Me gusta la programación orientada a objetos y el trabajo colaborativo.</p>
+          </div>
+        </article>
+
+        <article class="integrante" data-index="4" tabindex="-1" aria-hidden="true">
+          <img src="fotos/alumno5.jpg" alt="Foto de Mariana Arriaga" class="foto" />
+          <div class="bio">
+            <p class="nombre"><strong>Mariana Arriaga</strong></p>
+            <p class="descripcion">Estudiante de sexto semestre. Me interesa el diseño de interfaces y el desarrollo de aplicaciones móviles.</p>
+          </div>
+        </article>
+
+        <article class="integrante" data-index="5" tabindex="-1" aria-hidden="true">
+          <img src="fotos/alumno6.jpg" alt="Foto de Diego Alejandro" class="foto" />
+          <div class="bio">
+            <p class="nombre"><strong>Diego Alejandro</strong></p>
+            <p class="descripcion">Estudiante de sexto semestre. Me apasiona la ciberseguridad y el desarrollo de soluciones tecnológicas.</p>
+          </div>
+        </article>
+      </div>
+
+      <!-- Controles de navegación -->
+      <div class="controles" role="group" aria-label="Controles del carrusel">
+        <button id="prev" type="button" aria-label="Integrante anterior">◀ Anterior</button>
+        <button id="next" type="button" aria-label="Siguiente integrante">Siguiente ▶</button>
+      </div>
+
+      <!-- Botón de cambio de fondo -->
+      <div class="controles-color" role="group" aria-label="Cambiar color de fondo">
+        <button id="btn-color" type="button" aria-label="Cambiar color de fondo">🎨 Cambio de fondo</button>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    (function() {
+      const integrantes = Array.from(document.querySelectorAll('.integrante'));
+      const btnNext = document.getElementById('next');
+      const btnPrev = document.getElementById('prev');
+      const carrusel = document.querySelector('.carrusel');
+
+      const coloresPastel = ['#EDE7F6', '#E8F5E9', '#FCE4EC', '#FFFDE7', '#FBE9E7', '#E3F2FD'];
+      let colorIndex = 0;
+
+      function siguienteColor() {
+        document.documentElement.style.backgroundColor = coloresPastel[colorIndex];
+        colorIndex = (colorIndex + 1) % coloresPastel.length;
+      }
+
+      // Aplicar color inicial
+      siguienteColor();
+
+      let activo = 0;
+      const total = integrantes.length;
+
+      // Ajustar altura del carrusel al elemento activo actual
+      function ajustarAltura(el) {
+        carrusel.style.height = el.offsetHeight + 'px';
+      }
+
+      function actualizarVisibilidad(nuevo) {
+        nuevo = (nuevo + total) % total;
+
+        integrantes[activo].classList.remove('activo');
+        integrantes[activo].setAttribute('aria-hidden', 'true');
+        integrantes[activo].setAttribute('tabindex', '-1');
+
+        integrantes[nuevo].classList.add('activo');
+        integrantes[nuevo].setAttribute('aria-hidden', 'false');
+        integrantes[nuevo].setAttribute('tabindex', '0');
+        integrantes[nuevo].focus({ preventScroll: true });
+
+        activo = nuevo;
+
+        // Actualizar altura tras la transición
+        setTimeout(() => ajustarAltura(integrantes[activo]), 380);
+      }
+
+      btnNext.addEventListener('click', () => { actualizarVisibilidad(activo + 1); siguienteColor(); });
+      btnPrev.addEventListener('click', () => { actualizarVisibilidad(activo - 1); siguienteColor(); });
+
+      document.getElementById('btn-color').addEventListener('click', siguienteColor);
+
+      document.addEventListener('keydown', (e) => {
+        if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.isContentEditable) return;
+        if (e.key === 'ArrowRight') btnNext.click();
+        if (e.key === 'ArrowLeft')  btnPrev.click();
+      });
+
+      window.addEventListener('load', () => ajustarAltura(integrantes[0]));
+      // Fallback si load ya pasó
+      ajustarAltura(integrantes[0]);
+
+      // Recalcular al redimensionar ventana
+      window.addEventListener('resize', () => ajustarAltura(integrantes[activo]));
+    })();
+  </script>
 </body>
-
-
-<footer>
-    <p>Derechos reservados &copy; 2026 Equipo coraje</p>
-</footer>
-
 </html>
